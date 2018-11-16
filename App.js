@@ -15,10 +15,11 @@ import {
   Image,
   Dimensions,
   ScrollView,
-  FlatList
+  FlatList,
+  StatusBar,
+  ToolbarAndroid,
 } from 'react-native';
-
-const width = Dimensions.get('screen').width
+import Post from './src/components/Post'
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -27,64 +28,70 @@ const instructions = Platform.select({
     'Shake or press menu button for dev menu',
 });
 
-export default class App extends Component<Props> {
+export default class App extends Component {
+
+  constructor() {
+    super();
+    this.state = {
+      fotos: []
+    }
+  }
+
+  componentDidMount() {
+    fetch('http://5beebac27839000013e6fb1e.mockapi.io/fotos')
+      .then(resposta => resposta.json())
+      .then(json => this.setState({ fotos: json }));
+  }
+
+  onActionSelected(position) {
+    if (position === 0) { // index of 'Settings'
+      // showSettings();
+    }
+  };
   render() {
-    const fotos = [
-      { id: 1, usuario: 'thasciano' },
-      { id: 2, usuario: 'teste' },
-      { id: 3, usuario: 'asd' },
-    ]
     return (
+      <View style={styles.container}>
+        <StatusBar
+          backgroundColor='#790e8b'
+          animated={true} />
 
-      <FlatList style={styles.container}
-        keyExtractor={item => item.id}
-        data={fotos}
-        renderItem={({ item }) =>
-          <View>
-            <View style={styles.cabecalho}>
-              <Image source={require('./local/android.jpg')}
-                style={styles.fotoDePerfil} />
-              <Text >{item.usuario}</Text>
-            </View>
+        <ToolbarAndroid
+          title="Compartilhagram"
+          titleColor='#fff'
+          subtitle="Timeline"
+          subtitleColor='#fff'
+          backgroundColor="#ab47bc"
+          style={styles.toolbar}
+          actions={[
+            { title: 'Sair', icon: require('./local/img/s2.png'), show: 'never' }
+          ]}
+          onActionSelected={this.onActionSelected} />
 
-            <Image source={require('./local/android.jpg')}
-              style={styles.foto} />
-
-          </View>
-        }
-      />
-
-      /*   <ScrollView style={{ marginTop: 20 }}>
-          {fotos.map(foto =>
-             <View key={foto.id}>
-              <Text style={styles.instructions}>{foto.usuario}</Text>
-              <Image source={require('./local/android.jpg')}
-                style={{ width: width, height: 200 }} />
-            </View>
-          )}
-  
-        </ScrollView> */
+        <FlatList style={styles.container}
+          keyExtractor={item => item.id}
+          data={this.state.fotos}
+          renderItem={({ item }) =>
+            <Post foto={item} />
+          }
+        />
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
+    // backgroundColor: '#c7c7c7',
+  },
+  lista: {
     marginTop: 20,
   },
-  cabecalho: {
+  toolbar: {
+    height: 56,
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    margin: 10,
-  },
-  fotoDePerfil: {
-    marginRight: 10,
-    borderRadius: 20,
-    width: 40,
-    height: 40
-  },
-  foto: {
-    width: width,
-    height: width,
+    alignSelf: 'stretch',
+    textAlign: 'center',
   },
 });

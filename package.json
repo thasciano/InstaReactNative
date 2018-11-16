@@ -7,8 +7,19 @@
     "test": "jest"
   },
   "dependencies": {
+    "@expo/vector-icons": "^8.0.0",
+    "expo": "^31.0.5",
+    "expo-asset": "^1.0.2",
+    "expo-constants": "^1.1.0",
+    "expo-core": "^1.2.0",
+    "expo-font": "^1.1.0",
+    "native-base": "^2.8.1",
     "react": "16.6.1",
-    "react-native": "0.57.5"
+    "react-native": "0.57.5",
+    "react-native-elements": "^0.19.1",
+    "react-native-material-bottom-navigation": "^1.0.2",
+    "react-native-paper": "^2.2.4",
+    "react-native-tabbar-bottom": "^1.0.4"
   },
   "devDependencies": {
     "babel-jest": "23.6.0",
